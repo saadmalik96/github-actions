@@ -32,9 +32,6 @@ jobs:
           distribution: 'temurin'
           java-version: '21'
 
-      - name: Wait for MySQL to be Ready
-        run: sleep 5
-
       - name: Create Database
         run: mysql --host=127.0.0.1 --user=root --password=abcd1234 -e "CREATE DATABASE IF NOT EXISTS micronaut_crud;"
 
