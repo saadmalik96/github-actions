@@ -43,3 +43,24 @@ jobs:
         with:
           name: micronaut-crud-jar
           path: build/libs/*.jar
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download Build Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: micronaut-crud-jar
+          path: build/libs
+
+      - name: Get Version
+        run: echo "VERSION=$(date +%Y%m%d%H%M%S)" >> $GITHUB_ENV
+
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: build/libs/*.jar
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
