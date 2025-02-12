@@ -1,0 +1,48 @@
+name: CI Workflow for building Micronaut CRUD Application
+
+on:
+  push:
+    branches:
+      - jbdc
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: abcd1234
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping --host=localhost --user=root --password=abcd1234"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Java 21
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: Wait for MySQL to be Ready
+        run: sleep 5
+
+      - name: Create Database
+        run: mysql --host=127.0.0.1 --user=root --password=abcd1234 -e "CREATE DATABASE IF NOT EXISTS micronaut_crud;"
+
+      - name: Build and Run Test
+        run: ./gradlew clean build
+
+      - name: Archive Build Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: micronaut-crud-jar
+          path: build/libs/*.jar
