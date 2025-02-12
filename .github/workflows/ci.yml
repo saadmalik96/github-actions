@@ -35,6 +35,9 @@ jobs:
       - name: Create Database
         run: mysql --host=127.0.0.1 --user=root --password=abcd1234 -e "CREATE DATABASE IF NOT EXISTS micronaut_crud;"
 
+      - name: Setup Gradle Wrapper
+        run: gradle wrapper
+
       - name: Build and Run Test
         run: ./gradlew clean build
 
