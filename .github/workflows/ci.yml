@@ -3,7 +3,7 @@ name: CI Workflow for building Micronaut CRUD Application
 on:
   push:
     branches:
-      - jbdc
+      - jdbc
 
 jobs:
   build:
