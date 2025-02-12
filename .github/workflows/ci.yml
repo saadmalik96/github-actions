@@ -57,6 +57,14 @@ jobs:
       - name: Get Version
         run: echo "VERSION=$(date +%Y%m%d%H%M%S)" >> $GITHUB_ENV
 
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Configure Git User
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+
       - name: Create Git Tag
         run: |
           TAG_NAME=$(date +%Y%m%d%H%M%S)
